@@ -5,8 +5,6 @@ import '../screens/product_details_screen.dart';
 import '../providers/product.dart';
 
 class ProductItem extends StatelessWidget {
-  const ProductItem({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
@@ -15,11 +13,15 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         footer: GridTileBar(
           backgroundColor: Colors.black54,
-          leading: IconButton(
-            icon: const Icon(Icons.favorite),
-            color: Theme.of(context).accentColor,
-            iconSize: 18,
-            onPressed: () {},
+          leading: Consumer<Product>(
+            builder: (ctx, product, _) => IconButton(
+              icon: Icon(
+                  product.isFavorite ? Icons.favorite : Icons.favorite_border),
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                product.toggleFavoriteStatus();
+              },
+            ),
           ),
           title: Text(
             product.title,
@@ -28,7 +30,6 @@ class ProductItem extends StatelessWidget {
           trailing: IconButton(
             icon: const Icon(Icons.shop),
             color: Theme.of(context).accentColor,
-            iconSize: 18,
             onPressed: (() {}),
           ),
         ),
