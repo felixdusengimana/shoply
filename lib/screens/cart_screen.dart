@@ -56,6 +56,10 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
             ),
+            if (cart.items.values.toList().isEmpty)
+              const Center(
+                child: Text("No items in cart"),
+              ),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (ctx, index) => CartItem(

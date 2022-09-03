@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,6 +36,18 @@ class ProductItem extends StatelessWidget {
             color: Theme.of(context).accentColor,
             onPressed: (() {
               cart.addItem(product.id, product.price, product.title);
+
+              // ignore: deprecated_member_use
+              Scaffold.of(context).hideCurrentSnackBar();
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: const Text("Item added to cart"),
+                duration: const Duration(seconds: 2),
+                action: SnackBarAction(
+                    label: "UNDO",
+                    onPressed: () {
+                      cart.removeSingleItem(product.id);
+                    }),
+              ));
             }),
           ),
         ),
