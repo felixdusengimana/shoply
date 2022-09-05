@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/http_exception.dart';
 import './product.dart';
 
 class ProductsProvider with ChangeNotifier {
@@ -139,8 +140,20 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
-    notifyListeners();
+  Future<void> deleteProduct(String id) async {
+    try {
+      final url = Uri.https('flutter-demo-7cd5d-default-rtdb.firebaseio.com',
+          '/products/$id.json');
+      await http.delete(url).then((resp) {
+        if (resp.statusCode >= 400) {
+          throw HTTPException("Could not delete product.");
+        }
+        _items.removeWhere((prod) => prod.id == id);
+        notifyListeners();
+      });
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
   }
 }

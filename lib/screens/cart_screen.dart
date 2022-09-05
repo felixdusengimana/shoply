@@ -40,18 +40,7 @@ class CartScreen extends StatelessWidget {
                       ),
                       backgroundColor: Theme.of(context).primaryColor,
                     ),
-                    if (cart.items.values.toList().isNotEmpty)
-                      TextButton(
-                        onPressed: () {
-                          Provider.of<OrderProviders>(context, listen: false)
-                              .addOrder(
-                                  cart.items.values.toList(), cart.totalAmount);
-                          cart.clearCart();
-                          Navigator.of(context)
-                              .pushNamed(OrderScreen.routeName);
-                        },
-                        child: const Text('ORDER NOW'),
-                      ),
+                    OrderButton(cart: cart),
                   ],
                 ),
               ),
@@ -73,5 +62,42 @@ class CartScreen extends StatelessWidget {
             ),
           ],
         ));
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
+
+  final CartProvider cart;
+
+  @override
+  State<OrderButton> createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  bool _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: (widget.cart.items.values.toList().isNotEmpty && !_isLoading)
+          ? () async {
+              setState(() {
+                _isLoading = true;
+              });
+              await Provider.of<OrderProviders>(context, listen: false)
+                  .addOrder(widget.cart.items.values.toList(),
+                      widget.cart.totalAmount);
+              setState(() {
+                _isLoading = false;
+              });
+              widget.cart.clearCart();
+              // Navigator.of(context).pushNamed(OrderScreen.routeName);
+            }
+          : null,
+      child: const Text('ORDER NOW'),
+    );
   }
 }
