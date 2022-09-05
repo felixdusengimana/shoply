@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart_provider.dart';
+import '../providers/products_provider.dart';
 import '../widgets/product_grid.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/badge.dart';
@@ -18,6 +19,23 @@ class ProductOverViewScreen extends StatefulWidget {
 
 class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   var _showOnlyFavorites = false;
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      // setState(() {
+      //   _isLoading = true;
+      // });
+      Provider.of<ProductsProvider>(context).fetchAndSetProducts().then((_) {
+        // setState(() {
+        //   _isLoading = false;
+        // });
+      });
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +54,7 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
                   value: FilterOptions.Favorites,
                   child: Text("Only Favorites")),
               const PopupMenuItem(
-                  value: FilterOptions.All, child: const Text("Show All")),
+                  value: FilterOptions.All, child: Text("Show All")),
             ],
             onSelected: (FilterOptions selectedValue) {
               if (selectedValue == FilterOptions.Favorites) {
@@ -66,7 +84,11 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
                   ))),
         ],
       ),
-      body: ProductGrid(_showOnlyFavorites),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductGrid(_showOnlyFavorites),
       drawer: const AppDrawer(),
     );
   }
