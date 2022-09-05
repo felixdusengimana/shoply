@@ -60,6 +60,9 @@ class ProductItem extends StatelessWidget {
           }),
           child: Image.network(
             product.imageUrl,
+            errorBuilder: (context, error, stackTrace) => Image.network(
+                'https://rdb.rw/wp-content/uploads/2018/01/default-placeholder.png',
+                fit: BoxFit.cover),
             fit: BoxFit.cover,
           ),
         ),

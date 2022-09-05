@@ -56,6 +56,7 @@ class ProductsProvider with ChangeNotifier {
         'flutter-demo-7cd5d-default-rtdb.firebaseio.com', '/products.json');
     try {
       final response = await http.get(url);
+      if (response.body == 'null') return;
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {

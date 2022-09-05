@@ -23,18 +23,18 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   var _isLoading = false;
 
   @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      // setState(() {
-      //   _isLoading = true;
-      // });
-      Provider.of<ProductsProvider>(context).fetchAndSetProducts().then((_) {
-        // setState(() {
-        //   _isLoading = false;
-        // });
+  void initState() {
+    Future.delayed(Duration.zero).then((_) async {
+      setState(() {
+        _isLoading = true;
       });
-    }
-    super.didChangeDependencies();
+      await Provider.of<ProductsProvider>(context, listen: false)
+          .fetchAndSetProducts();
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    super.initState();
   }
 
   @override
