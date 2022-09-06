@@ -27,30 +27,36 @@ class OrderProviders with ChangeNotifier {
 
   Future<void> fetchAndSetOrders() async {
     final url = Uri.https(_baseUrl, '/orders.json');
-    final data = await http.get(url);
-    final List<Order> loadedOrders = [];
-    if (data.body == 'null') return;
-    final extractedData = json.decode(data.body) as Map<String, dynamic>;
-    if (extractedData.isEmpty) {
-      return;
-    }
+    try {
+      final data = await http.get(url);
+      print(data.statusCode);
+      final List<Order> loadedOrders = [];
+      if (data.body == 'null') throw Exception();
+      final extractedData = json.decode(data.body) as Map<String, dynamic>;
+      if (extractedData.isEmpty) {
+        return;
+      }
 
-    extractedData.forEach((orderID, orderData) {
-      print(orderID);
-      loadedOrders.add(Order(
-          id: orderID,
-          amount: orderData['amount'],
-          products: (orderData['products'] as List<dynamic>)
-              .map((item) => CartItem(
-                  id: item['id'],
-                  title: item['title'],
-                  quantity: item['quantity'],
-                  price: item['price']))
-              .toList(),
-          dateTime: DateTime.parse(orderData['dateTime'])));
-    });
-    _orders = loadedOrders;
-    notifyListeners();
+      extractedData.forEach((orderID, orderData) {
+        print(orderID);
+        loadedOrders.add(Order(
+            id: orderID,
+            amount: orderData['amount'],
+            products: (orderData['products'] as List<dynamic>)
+                .map((item) => CartItem(
+                    id: item['id'],
+                    title: item['title'],
+                    quantity: item['quantity'],
+                    price: item['price']))
+                .toList(),
+            dateTime: DateTime.parse(orderData['dateTime'])));
+      });
+      _orders = loadedOrders;
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
+    }
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {

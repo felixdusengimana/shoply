@@ -7,7 +7,9 @@ import '../screens/edit_product_screen.dart';
 import './screens/products_overview_screen.dart';
 import './screens/product_details_screen.dart';
 import './screens/user_products_screen.dart';
+import './screens/auth_screen.dart';
 
+import '../providers/auth_provider.dart';
 import './providers/products_provider.dart';
 import '../providers/orders_provider.dart';
 import './providers/cart_provider.dart';
@@ -27,7 +29,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => CartProvider(),
         ),
-        ChangeNotifierProvider(create: (_) => OrderProviders())
+        ChangeNotifierProvider(create: (_) => OrderProviders()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -37,11 +40,12 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Lato',
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: ProductOverViewScreen(),
+        home: AuthScreen(),
         routes: {
+          ProductOverViewScreen.routeName: (context) => ProductOverViewScreen(),
           ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
-          OrderScreen.routeName: (ctx) => OrderScreen(),
+          OrderScreen.routeName: (ctx) => const OrderScreen(),
           UserProductScreen.routeName: (ctx) => const UserProductScreen(),
           AddEditProductScreen.routeName: (ctx) => const AddEditProductScreen(),
         },

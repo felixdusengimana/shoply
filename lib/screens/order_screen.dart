@@ -5,46 +5,36 @@ import '../providers/orders_provider.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/order_item.dart';
 
-class OrderScreen extends StatefulWidget {
-  static const routeName = '/order';
+class OrderScreen extends StatelessWidget {
+  static const routeName = '/orders';
 
-  @override
-  State<OrderScreen> createState() => _OrderScreenState();
-}
-
-class _OrderScreenState extends State<OrderScreen> {
-  bool _loading = false;
-
-  @override
-  void initState() {
-    Future.delayed(Duration.zero).then((_) async {
-      setState(() {
-        _loading = true;
-      });
-      await Provider.of<OrderProviders>(context, listen: false)
-          .fetchAndSetOrders();
-      setState(() {
-        _loading = false;
-      });
-    });
-    super.initState();
-  }
-
+  const OrderScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final orderData = Provider.of<OrderProviders>(context);
+    // final orderData = Provider.of<OrderProviders>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Orders'),
       ),
-      body: _loading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemBuilder: ((context, index) =>
-                  OrderItem(orderData.orders[index])),
-              itemCount: orderData.orders.length),
+      body: FutureBuilder(
+          future: Provider.of<OrderProviders>(context, listen: false)
+              .fetchAndSetOrders(),
+          builder: (context, dataSnapshot) => dataSnapshot.connectionState ==
+                  ConnectionState.waiting
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : dataSnapshot.error != null
+                  ? const Center(
+                      child: Text('An error occured'),
+                    )
+                  : Consumer<OrderProviders>(
+                      builder: (context, orderData, child) => ListView.builder(
+                        itemCount: orderData.orders.length,
+                        itemBuilder: (context, index) =>
+                            OrderItem(orderData.orders[index]),
+                      ),
+                    )),
       drawer: const AppDrawer(),
     );
   }

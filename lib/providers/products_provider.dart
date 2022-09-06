@@ -6,7 +6,10 @@ import '../models/http_exception.dart';
 import './product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  List<Product> _items = [
+  List<Product> _items = [];
+
+/*
+
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -39,8 +42,8 @@ class ProductsProvider with ChangeNotifier {
       imageUrl:
           'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
     ),
-  ];
-
+  
+  */
   // var _showFavoriteOnly = false;
 
   List<Product> get items {
