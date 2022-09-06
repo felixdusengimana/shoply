@@ -12,6 +12,8 @@ enum AuthMode { Signup, Login }
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';
 
+  const AuthScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;

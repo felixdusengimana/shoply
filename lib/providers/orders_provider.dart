@@ -19,17 +19,20 @@ class Order {
 
 class OrderProviders with ChangeNotifier {
   final String _baseUrl = 'flutter-demo-7cd5d-default-rtdb.firebaseio.com';
+  final authToken;
+  final userId;
   List<Order> _orders = [];
+  OrderProviders(this.authToken, this.userId, this._orders);
 
   List<Order> get orders {
     return [..._orders];
   }
 
   Future<void> fetchAndSetOrders() async {
-    final url = Uri.https(_baseUrl, '/orders.json');
+    final url =
+        Uri.https(_baseUrl, '/orders/$userId.json', {'auth': authToken});
     try {
       final data = await http.get(url);
-      print(data.statusCode);
       final List<Order> loadedOrders = [];
       if (data.body == 'null') throw Exception();
       final extractedData = json.decode(data.body) as Map<String, dynamic>;
@@ -60,7 +63,8 @@ class OrderProviders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = Uri.https(_baseUrl, '/orders.json');
+    final url =
+        Uri.https(_baseUrl, '/orders/$userId.json', {'auth': authToken});
     final timestamp = DateTime.now();
     try {
       final response = await http.post(url,
@@ -87,8 +91,7 @@ class OrderProviders with ChangeNotifier {
       );
       notifyListeners();
     } catch (error) {
-      print("error");
-      throw error;
+      rethrow;
     }
   }
 

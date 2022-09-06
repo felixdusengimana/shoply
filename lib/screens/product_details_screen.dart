@@ -24,6 +24,10 @@ class ProductDetailsScreen extends StatelessWidget {
               child: Image.network(
                 loadedProduct.imageUrl,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Image.network(
+                  'https://rdb.rw/wp-content/uploads/2018/01/default-placeholder.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(
@@ -41,7 +45,7 @@ class ProductDetailsScreen extends StatelessWidget {
             ),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 loadedProduct.description,
                 textAlign: TextAlign.center,
