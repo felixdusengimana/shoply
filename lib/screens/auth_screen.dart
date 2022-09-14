@@ -111,28 +111,28 @@ class _AuthCardState extends State<AuthCard>
 
   @override
   void initState() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    );
+    // _controller = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(seconds: 1),
+    // );
 
-    _heightAnimation = Tween(
-      begin: const Size(double.infinity, 260),
-      end: const Size(double.infinity, 320),
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    )..addListener(() {
-        setState(() {});
-      });
+    // _heightAnimation = Tween(
+    //   begin: const Size(double.infinity, 260),
+    //   end: const Size(double.infinity, 320),
+    // ).animate(
+    //   CurvedAnimation(
+    //     parent: _controller,
+    //     curve: Curves.easeInOut,
+    //   ),
+    // )..addListener(() {
+    //     setState(() {});
+    //   });
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
@@ -217,12 +217,15 @@ class _AuthCardState extends State<AuthCard>
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
-        height: _heightAnimation.value.height,
-        constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
-        width: deviceSize.width * 0.75,
-        padding: const EdgeInsets.all(16.0),
+      child: AnimatedBuilder(
+        animation: _heightAnimation,
+        builder: (ctx, ch) => Container(
+            height: _heightAnimation.value.height,
+            constraints: BoxConstraints(
+                minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+            width: deviceSize.width * 0.75,
+            padding: const EdgeInsets.all(16.0),
+            child: ch),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
