@@ -200,12 +200,12 @@ class _AuthCardState extends State<AuthCard>
       setState(() {
         _authMode = AuthMode.Signup;
       });
-      _controller.forward();
+      // _controller.forward();
     } else {
       setState(() {
         _authMode = AuthMode.Login;
       });
-      _controller.reverse();
+      // _controller.reverse();
     }
   }
 
