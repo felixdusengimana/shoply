@@ -31,11 +31,8 @@ class OrderProviders with ChangeNotifier {
   Future<void> fetchAndSetOrders() async {
     final url =
         Uri.https(_baseUrl, '/orders/$userId.json', {'auth': authToken});
-    print(url);
     try {
       final data = await http.get(url);
-      print("here");
-
       final List<Order> loadedOrders = [];
       if (data.body == 'null') throw Exception();
       final extractedData = json.decode(data.body) as Map<String, dynamic>;
@@ -60,8 +57,7 @@ class OrderProviders with ChangeNotifier {
       _orders = loadedOrders;
       notifyListeners();
     } catch (error) {
-      print(error.toString());
-      throw error;
+      rethrow;
     }
   }
 
