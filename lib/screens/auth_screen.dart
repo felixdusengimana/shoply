@@ -111,28 +111,26 @@ class _AuthCardState extends State<AuthCard>
 
   @override
   void initState() {
-    // _controller = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(seconds: 1),
-    // );
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
 
-    // _heightAnimation = Tween(
-    //   begin: const Size(double.infinity, 260),
-    //   end: const Size(double.infinity, 320),
-    // ).animate(
-    //   CurvedAnimation(
-    //     parent: _controller,
-    //     curve: Curves.easeInOut,
-    //   ),
-    // )..addListener(() {
-    //     setState(() {});
-    //   });
+    _heightAnimation = Tween(
+      begin: const Size(double.infinity, 260),
+      end: const Size(double.infinity, 320),
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
     super.initState();
   }
 
   @override
   void dispose() {
-    // _controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -200,12 +198,12 @@ class _AuthCardState extends State<AuthCard>
       setState(() {
         _authMode = AuthMode.Signup;
       });
-      // _controller.forward();
+      _controller.forward();
     } else {
       setState(() {
         _authMode = AuthMode.Login;
       });
-      // _controller.reverse();
+      _controller.reverse();
     }
   }
 
