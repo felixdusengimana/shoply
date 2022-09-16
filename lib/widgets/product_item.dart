@@ -61,12 +61,21 @@ class ProductItem extends StatelessWidget {
               arguments: product.id,
             );
           }),
-          child: Image.network(
-            product.imageUrl,
-            errorBuilder: (context, error, stackTrace) => Image.network(
-                'https://rdb.rw/wp-content/uploads/2018/01/default-placeholder.png',
-                fit: BoxFit.cover),
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: product.id,
+            child: FadeInImage(
+              placeholder:
+                  const AssetImage("assets/images/product-placeholder.png"),
+              image: NetworkImage(product.imageUrl),
+              fit: BoxFit.cover,
+              // child: Image.network(
+              //   product.imageUrl,
+              //   errorBuilder: (context, error, stackTrace) => Image.network(
+              //       'https://rdb.rw/wp-content/uploads/2018/01/default-placeholder.png',
+              //       fit: BoxFit.cover),
+              //   fit: BoxFit.cover,
+              // ),
+            ),
           ),
         ),
       ),
